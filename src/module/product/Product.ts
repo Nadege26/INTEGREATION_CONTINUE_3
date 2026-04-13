@@ -43,6 +43,10 @@ export class Product {
         if (title.length < 3) {
             throw new Error('titre trop court');
         }
+
+        if (title.length > 20) {
+            throw new Error('titre trop long');
+        }
     }
 
     private checkPrice(price: number) {

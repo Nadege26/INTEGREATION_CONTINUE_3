@@ -133,4 +133,24 @@ describe('US-1 : Créer un produit - E2E', () => {
         const products = await dataSource.getRepository(Product).find();
         expect(products).toHaveLength(0);
     });
+
+
+    test('Scénario 5: création échouée, titre supérieur à 20 caractères', async () => {
+        await dataSource.getRepository(Product).clear();
+
+        const response = await request(app)
+            .post('/api/product')
+            .send({
+                title: 'switch,vkperf,klsd,clsc,pozj,pez',
+                description: 'nouvelle console',
+                price: 500
+            })
+            .set('Content-Type', 'application/json');
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('titre trop long');
+
+        const products = await dataSource.getRepository(Product).find();
+        expect(products).toHaveLength(0);
+    });
 });
