@@ -30,8 +30,6 @@ Quand je créé un produit avec :
 Alors le produit n'est pas créé
 Et j'ai un message "erreur, le titre ne doit pas contenir d'espace"
 
----
-
 **User story :**
 
 Mettre à jour un produit

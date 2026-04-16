@@ -111,7 +111,7 @@ describe('US-1 : Créer un produit', () => {
         await expect(
             // Quand je créé un produit
             createProductUseCase.execute({
-                title: 'switch 2',
+                title: 'switch 2ubfedehoudhe uhfezodhojoid uehrforizdjpok',
                 description: 'nouvelle console',
                 price: 500
             })
