@@ -101,4 +101,21 @@ describe('US-1 : Créer un produit', () => {
             // Alors une erreur doit être envoyée «erreur lors de la création du produit»
         ).rejects.toThrow('erreur lors de la création du produit');
     });
+
+
+    test('Scénario 5 : création échouée, titre trop long', async () => {
+        //Étant donné qu'il n'y a pas de produit enregistré
+        const createProductRepository = new CreateProductDummyRepository();
+        const createProductUseCase = new CreateProductUseCase(createProductRepository);
+
+        await expect(
+            // Quand je créé un produit
+            createProductUseCase.execute({
+                title: 'switch 2ubfedehoudhe uhfezodhojoid uehrforizdjpok',
+                description: 'nouvelle console',
+                price: 500
+            })
+            // Alors une erreur doit être envoyée «erreur lors de la création du produit»
+        ).rejects.toThrow('titre trop long');
+    });
 });

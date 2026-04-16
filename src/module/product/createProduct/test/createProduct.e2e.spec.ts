@@ -153,4 +153,31 @@ describe('US-1 : Créer un produit - E2E', () => {
         const products = await dataSource.getRepository(Product).find();
         expect(products).toHaveLength(0);
     });
+
+
+    test('Scénario 6: création échouée, espace dans le titre', async () => {
+        await dataSource.getRepository(Product).clear();
+
+        //Quand je créé un produit avec :
+        //
+        // - titre : " switch"
+        // - prix : 200
+        // - description : "nouvelle console"
+        const response = await request(app)
+            .post('/api/product')
+            .send({
+                title: ' switch',
+                description: 'nouvelle console',
+                price: 200
+            })
+            .set('Content-Type', 'application/json');
+
+        //Alors le produit n'est pas créé
+        const products = await dataSource.getRepository(Product).find();
+        expect(products).toHaveLength(0);
+
+        //Et j'ai un message "erreur, le titre ne doit pas contenir d'espace"
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("erreur, le titre ne doit pas contenir d'espace");
+    });
 });

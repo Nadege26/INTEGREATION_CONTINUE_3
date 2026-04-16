@@ -1,106 +1,209 @@
-## PRODUIT
+**User story :** 
 
-### US-1: Créer un produit
+Créer un produit
 
-En tant qu’admin,  
-Je veux pouvoir créer un produit,  
-Afin de le mettre en vente
+**Règles métier :** 
 
-Règles métier :
-- titre > 2
-- Prix > 0
-- Prix < 10 000
+le titre ne contient pas d'espace
 
-    - Exemple 1/ Scénario 1 : création réussie
-        - Étant donné qu'il n'y a pas de produit enregistré
-        - Quand je créé un produit avec en titre «switch 2», description «nouvelle console» et un prix à 500
-        - Alors le produit doit être créé
+**Scénarios :** 
 
-    - Exemple 2/ Scénario 2 : création échouée, titre trop court
-        - Étant donné qu'il n'y a pas de produit enregistré
-        - Quand je créé un produit avec en titre «sw»
-        - Alors une erreur doit être envoyée "titre trop court»
+- Création réussie : 
 
-    - Exemple 3/ Scénario 3 : création échouée, prix négatif
-        - Étant donné qu'il n'y a pas de produit enregistré
-        - Quand je créé un produit avec en prix -10
-        - Alors une erreur doit être envoyée «le prix doit être supérieur à 0»
+Quand je créé un produit avec : 
 
-    - Exemple 4/ Scénario 4 : création échouée, prix supérieur à 10000 
-        - Étant donné qu'il n'y a pas de produit enregistré
-        - Quand je créé un produit avec en prix 11000
-        - Alors une erreur doit être envoyée «le prix doit être inférieur à 11000»
-    - Exemple 5/ Scénario 5 : création échouée, échec de sauvegarde non prévue
-      - Étant donné qu'il n'y a pas de produit enregistré
-      - Quand je créé un produit, si la sauvegarde échoue
-      - Alors une erreur doit être envoyée «erreur lors de la création du produit»
+- titre : "test"
+- prix : 200
+- description : "blalblablalb"
 
+Alors le produit est créé
+Et j'ai un message "produit créé"
 
-### US-2: Modifier un produit
+- Création échouée : titre contient un espace
 
+Quand je créé un produit avec :
 
-En tant qu’admin,  
-Je veux pouvoir modifier un produit,  
-Afin de mettre à jour ses infos pour la vente
+- titre : " switch"
+- prix : 200
+- description : "nouvelle console"
 
-Règles métier :
-- titre > 2
-- Prix > 0
-- Prix < 10 000
+Alors le produit n'est pas créé
+Et j'ai un message "erreur, le titre ne doit pas contenir d'espace"
 
-    - Exemple 1/ Scénario 1 :
-        - Étant donné qu’un produit existe avec l’identifiant 2
-        - Quand je modifie le produit avec l’identifiant 2, avec en titre "switch 3», description «nouvelle nouvelle console» et un prix à 5000e
-        - Alors le produit doit être modifié
+---
 
-    - Exemple 2/ Scénario 2 :
-        - Étant donné qu’un produit existe avec l’identifiant 2
-        - Quand je modifie le produit avec l’identifiant 2 avec en titre "sw»
-        - Alors une erreur doit être envoyée «titre trop courr»
+**User story :**
 
-    - Exemple 3/ Scénario 3 :
-        - Étant donné qu’un produit existe avec l’identifiant 2
-        - Quand je modifie le produit avec l’identifiant 2 avec en prix -10
-        - Alors une erreur doit être envoyée "le prix doit être supérieur à 0»
+Mettre à jour un produit
 
-    - Exemple 4/ Scénario 4 :
-        - Étant donné  qu’un produit existe avec l’identifiant 2
-        - Quand je modifie le produit avec l’identifiant 2 avec en prix 11000
-        - Alors une erreur doit être envoyée « le prix doit être inférieur à 11000 »
+**Règles métier :**
 
+- le titre doit contenir entre 3 et 20 caractères
+- le prix doit être strictement supérieur à 0 et strictement inférieur à 10000
 
+**Scénarios :**
 
-## Order
+- Mise à jour réussie :
 
-### US-2: Ajouter un produit à une commande
+Étant donné un produit existant avec l'id 1
+Quand je mets à jour le produit 1 avec :
 
-En tant qu'utilisateur,  
-Je veux pouvoir ajouter un produit à une commande,
-Afin de commander le produit
+- titre : "switch pro"
+- prix : 350
+- description : "console révisée"
 
-Règles métier :
-- si un produit existe déjà dans la commande, on augmente la quantité
-- si le produit n'existe pas dans la commande, on l'ajoute avec une quantité de 1
-- l'utilisateur doit envoyer l'id du produit et la quantité
-- max 5 produits par commande
-- max 2000e par commande
+Alors le produit est mis à jour
+Et j'ai un message "produit mis à jour"
 
-    - Scénario US-2-1 : ajout réussi, produit n'existe pas dans la commande
-        - Étant donné qu'une commande existe avec l'identifiant 1 et qu'elle ne contient pas le produit avec l'identifiant 2
-        - Quand j'ajoute le produit avec l'identifiant 2 à la commande avec l'identifiant 1 avec une quantité de 1
-        - Alors le produit avec l'identifiant 2 doit être ajouté à la commande avec une quantité de 1
+- Mise à jour échouée : produit inexistant
 
-    - Scénario US-2-2: ajout réussi, produit existe déjà dans la commande
-        - Étant donné qu'une commande existe avec l'identifiant 1 et qu'elle contient déjà le produit avec l'identifiant 2 avec une quantité de 2
-        - Quand j'ajoute le produit avec l'identifiant 2 à la commande avec l'identifiant 1 avec une quantité de 1
-        - Alors la quantité du produit avec l'identifiant 2 dans la commande doit être mise à jour à 3
+Étant donné qu'aucun produit n'existe avec l'id 999
+Quand je mets à jour le produit 999 avec :
 
-    - Scénario US-2-3 : ajout échoué, dépassement du nombre maximum de produits
-        - Étant donné qu'une commande existe avec l'identifiant 1 et qu'elle contient déjà 5 produits différents
-        - Quand j'ajoute un nouveau produit à la commande avec l'identifiant 1
-        - Alors une erreur doit être envoyée « nombre maximum de produits atteint »
+- titre : "switch pro"
+- prix : 350
+- description : "console révisée"
 
-    - Scénario US-2-4 : ajout échoué, dépassement du montant maximum de la commande
-        - Étant donné qu'une commande existe avec l'identifiant 1 et que son montant total est de 1900e
-        - Quand j'ajoute un produit d'une valeur de 200e à la commande avec l'identifiant 1
-        - Alors une erreur doit être envoyée « montant maximum de la commande dépassé »
+Alors le produit n'est pas mis à jour
+Et j'ai un message "produit introuvable"
+
+- Mise à jour échouée : prix hors limites
+
+Étant donné un produit existant avec l'id 1
+Quand je mets à jour le produit 1 avec :
+
+- titre : "switch pro"
+- prix : 15000
+- description : "console révisée"
+
+Alors le produit n'est pas mis à jour
+Et j'ai un message "le prix doit être inférieur à 10000"
+
+---
+
+**User story :**
+
+Supprimer un produit
+
+**Règles métier :**
+
+- seul un produit existant peut être supprimé
+
+**Scénarios :**
+
+- Suppression réussie :
+
+Étant donné un produit existant avec l'id 1
+Quand je supprime le produit 1
+Alors le produit n'existe plus en base
+Et j'ai un message "produit supprimé"
+
+- Suppression échouée : produit inexistant
+
+Étant donné qu'aucun produit n'existe avec l'id 999
+Quand je supprime le produit 999
+Alors j'ai un message "produit introuvable"
+
+---
+
+**User story :**
+
+Créer une commande
+
+**Règles métier :**
+
+- une commande doit contenir entre 1 et 5 produits
+- le prix total doit être compris entre 2 et 500
+- une commande nouvellement créée a le statut PENDING
+
+**Scénarios :**
+
+- Création réussie :
+
+Quand je créé une commande avec :
+
+- productIds : [1, 2, 3]
+- totalPrice : 150
+
+Alors la commande est créée avec le statut PENDING
+Et j'ai un message "commande créée"
+
+- Création échouée : trop de produits
+
+Quand je créé une commande avec :
+
+- productIds : [1, 2, 3, 4, 5, 6]
+- totalPrice : 150
+
+Alors la commande n'est pas créée
+Et j'ai un message "une commande doit contenir entre 1 et 5 produits"
+
+- Création échouée : prix total hors limites
+
+Quand je créé une commande avec :
+
+- productIds : [1]
+- totalPrice : 1
+
+Alors la commande n'est pas créée
+Et j'ai un message "le prix total doit être compris entre 2 et 500"
+
+---
+
+**User story :**
+
+Annuler une commande
+
+**Règles métier :**
+
+- seule une commande au statut PENDING ou CONFIRMED peut être annulée
+- une commande déjà SHIPPED ou DELIVERED ne peut plus être annulée
+- une commande annulée passe au statut CANCELLED
+
+**Scénarios :**
+
+- Annulation réussie :
+
+Étant donné une commande existante avec l'id 1 et le statut PENDING
+Quand j'annule la commande 1
+Alors la commande 1 a le statut CANCELLED
+Et j'ai un message "commande annulée"
+
+- Annulation échouée : commande déjà expédiée
+
+Étant donné une commande existante avec l'id 1 et le statut SHIPPED
+Quand j'annule la commande 1
+Alors la commande 1 conserve le statut SHIPPED
+Et j'ai un message "une commande expédiée ne peut plus être annulée"
+
+- Annulation échouée : commande inexistante
+
+Étant donné qu'aucune commande n'existe avec l'id 999
+Quand j'annule la commande 999
+Alors j'ai un message "commande introuvable"
+
+---
+
+**User story :**
+
+Confirmer une commande
+
+**Règles métier :**
+
+- seule une commande au statut PENDING peut être confirmée
+- une commande confirmée passe au statut CONFIRMED
+
+**Scénarios :**
+
+- Confirmation réussie :
+
+Étant donné une commande existante avec l'id 1 et le statut PENDING
+Quand je confirme la commande 1
+Alors la commande 1 a le statut CONFIRMED
+Et j'ai un message "commande confirmée"
+
+- Confirmation échouée : commande déjà confirmée
+
+Étant donné une commande existante avec l'id 1 et le statut CONFIRMED
+Quand je confirme la commande 1
+Alors j'ai un message "seule une commande au statut PENDING peut être confirmée"
