@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [m1-epsi]
 
-    
+
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
