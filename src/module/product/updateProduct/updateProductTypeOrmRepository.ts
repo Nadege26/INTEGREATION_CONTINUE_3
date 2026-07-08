@@ -1,5 +1,5 @@
 import AppDataSource from '../../../config/db.config';
-import { Product } from '../productEntity';
+import { Product } from '../Product';
 import { UpdateProductRepository } from './updateProductRepository';
 import { Repository } from 'typeorm';
 

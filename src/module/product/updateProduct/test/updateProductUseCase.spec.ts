@@ -4,18 +4,23 @@ import { UpdateProductRepository } from '../updateProductRepository';
 import { Product } from '../../Product';
 
 class UpdateProductRepositoryMock implements UpdateProductRepository {
-    findOneById(id: number): Promise<Product | null> {
-        const product = new Product({
+    private readonly product: Product;
+
+    constructor() {
+        this.product = new Product({
             title: 'switch',
             description: 'console de jeu',
             price: 3000
         });
-        product.id = 2;
-        return product;
+        this.product.id = 2;
+    }
+
+    findOneById(id: number): Promise<Product | null> {
+        return Promise.resolve(this.product.id === id ? this.product : null);
     }
 
     save(product: Product): Promise<void> {
-        return product;
+        return Promise.resolve();
     }
 }
 
@@ -26,14 +31,17 @@ describe('US-1 : Modifier un produit', () => {
         const updateProductUseCase = new UpdateProductUsecase(updateProductRepositoryMock);
 
         // Quand je modifie le produit avec l’identifiant 2, avec en titre "switch 3», description «nouvelle nouvelle console» et un prix à 5000e
-        const updatedProduct: Product = await updateProductUseCase.execute({
+        await updateProductUseCase.execute({
             id: 2,
             title: 'switch 3',
             description: 'nouvelle nouvelle console',
             price: 5000
         });
 
+        const updatedProduct = await updateProductRepositoryMock.findOneById(2);
+
         // Alors le produit doit être modifié
+        expect(updatedProduct).not.toBeNull();
         expect(updatedProduct.title).toBe('switch 3');
         expect(updatedProduct.description).toBe('nouvelle nouvelle console');
         expect(updatedProduct.price).toBe(5000);
