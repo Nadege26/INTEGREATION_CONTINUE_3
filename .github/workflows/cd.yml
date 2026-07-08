@@ -1,0 +1,46 @@
+# Nom du workflow affiche dans l'onglet Actions de GitHub.
+name: CD
+
+# Evenements qui declenchent ce workflow.
+on:
+  # Declenchement lors d'un push Git.
+  push:
+    # Le workflow se lance uniquement sur des tags semantiques: vX.Y.Z.
+    tags:
+      - v*.*.*
+
+# Liste des jobs executes par ce workflow.
+jobs:
+  # Job de release: verifie puis deploie la version taggee.
+  release:
+    # Machine virtuelle fournie par GitHub Actions.
+    runs-on: ubuntu-latest
+    # Etapes executees dans l'ordre.
+    steps:
+      # Recupere le code du repository pour ce tag.
+      - uses: actions/checkout@v4
+
+      # Installe Node.js pour executer les commandes npm.
+      - uses: actions/setup-node@v4
+        # Parametres de configuration de setup-node.
+        with:
+          # Version Node stable (LTS) pour la fiabilite du pipeline.
+          node-version: 20
+          # Active le cache npm pour accelerer les executions.
+          cache: npm
+          # Fichier de lock utilise pour gerer la validite du cache.
+          cache-dependency-path: package-lock.json
+
+      # Installe les dependances de facon reproductible.
+      - run: npm ci
+      # Controle que le projet TypeScript compile.
+      - run: npx tsc --noEmit
+      # Controle la qualite/style du code.
+      - run: npm run lint
+      # Lance les tests unitaires avant la release.
+      - run: npm run test:unit
+
+      # Etape de deploiement: affiche la version en cours de release.
+      - name: Deploy step 
+        # github.ref_name contient le nom du tag qui a declenche la CD.
+        run: echo "Deploying version ${{ github.ref_name }}"

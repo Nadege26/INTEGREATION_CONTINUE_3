@@ -1,22 +1,44 @@
+# Nom du workflow affiche dans l'onglet Actions de GitHub.
 name: CI
 
+# Evenements qui declenchent ce workflow.
 on:
+  # Declenchement lors d'un push.
   push:
+    # Limite le declenchement a ma branche d'evaluation.
     branches: [m1-epsi]
 
+# Liste des jobs executes par le workflow.
 jobs:
-  unit-tests:
+  # Job principal de controle qualite.
+  quality-gate:
+    # Machine virtuelle utilisee par GitHub Actions.
     runs-on: ubuntu-latest
+    # Suite des etapes executees dans l'ordre.
     steps:
+      # Recupere le code du repository dans le runner.
       - uses: actions/checkout@v4
 
+      # Installe la version de Node.js necessaire au projet.
       - uses: actions/setup-node@v4
+        # Parametres de configuration de setup-node.
         with:
-          node-version: 25
+          # Version Node choisie (LTS stable).
+          node-version: 20
+          # Active le cache npm pour accelerer les runs.
           cache: npm
+          # Fichier verrouille utilise pour invalider/regenerer le cache.
           cache-dependency-path: package-lock.json
 
+      # Installe les dependances de maniere propre et reproductible.
       - run: npm ci
 
+      # Verifie la compilation TypeScript sans generer de fichiers.
+      - run: npx tsc --noEmit
+
+      # Verifie les regles de qualite/style avec ESLint.
+      - run: npm run lint
+
+      # Lance les tests unitaires pour detecter les regressions.
       - run: npm run test:unit
 
