@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:latest
@@ -10,11 +8,10 @@ services:
     ports:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
 
   sonarqube:
     image: sonarqube:community
-    container_name: sonarqube
     depends_on:
       - sonardb
     environment:
@@ -22,7 +19,7 @@ services:
       SONAR_JDBC_USERNAME: sonar
       SONAR_JDBC_PASSWORD: sonar
     ports:
-      - "9000:9000"
+      - "9001:9000"
     volumes:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
@@ -30,7 +27,6 @@ services:
 
   sonardb:
     image: postgres:15
-    container_name: sonardb
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
